@@ -14,6 +14,7 @@ from graphing_Day import getdatabyhour
 from timeGenerator import get_hour_array
 from graphingWeek import getdatabyweek
 from timeGenerator import get_last_7_days
+from download_data import savedataincsv
 
 
 loginrequest()
@@ -87,6 +88,7 @@ def download_data():
         messagebox.showerror("Error", "Invalid date format")
     else:
         # Replace this with your actual data download function
+        savedataincsv(str(date1),str(date2))
         data = f"Downloaded data from {date1} to {date2}"
         messagebox.showinfo("Download", data)
 
@@ -102,6 +104,7 @@ date_entry2 = ttk.Entry(root, textvariable=date_var2, state="readonly")
 
 select_button1 = tk.Button(root, text="Select Start Date", command=lambda: open_calendar(select_button1, date_var1))
 select_button2 = tk.Button(root, text="Select End Date", command=lambda: open_calendar(select_button2, date_var2))
+# date1, date2 = get_selected_dates()
 download_button = tk.Button(root, text="Download Data", command=download_data)
 
 select_button1.place(x=1030, y=245)
