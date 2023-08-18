@@ -31,24 +31,16 @@ def filter_data(json_response, ranges):
     return filtered_data
 
 def get_data():
-    latest_data = {}
+    latest_data = []
     get_response = requests.get(get_url, headers=header)
     
     # Check if the GET request was successful
     if get_response.status_code == 200:
         # Process the response
         json_response = get_response.json()
-        value_ranges = {
-        "temperature": (0, 50),
-        "humidity": (0, 100),
-        "flow": (0.9, 1.1)
-        # Add more key-value pairs and ranges as needed
-        }
-        
-        # Filter the data
-        filtered_data = filter_data(json_response, value_ranges)
+
         # Iterate over each key in the response JSON
-        for key, value_list in filtered_data.items():
+        for key, value_list in json_response.items():
             if key == "error":
                 print(json_response)
                 print("Error logging! Login Again")
@@ -57,19 +49,19 @@ def get_data():
             # Check if the value is a list
             if isinstance(value_list, list) and len(value_list) > 0:
                 # Iterate through the value list in reverse order
+                latest_value = None
                 for value in reversed(value_list):
                     if value is not None and value != "null" and value != 0:
-                        latest_data[key] = value
+                        latest_value = value
                         break  # Stop iterating once the latest non-zero, non-None value is found
-                else:
-                    latest_data[key] = None  # No suitable value found
+                latest_data.append(latest_value)
 
-                print(f"Key: {key}, Latest Value: {latest_data.get(key)}")
+                print(f"Key: {key}, Latest Value: {latest_value}")
             else:
                 print(f"Key: {key}, Value is not a list or empty")
     else:
         print("GET request failed. Status code:", get_response.status_code)
-
+    # print(latest_data)
     return latest_data
 
 
