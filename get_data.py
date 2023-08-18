@@ -73,4 +73,4 @@ def get_data():
     return latest_data
 
 
-get_data()
+# get_data()
