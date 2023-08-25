@@ -77,7 +77,7 @@ def getrequest():
         tk = f.read().strip()
 
 
-    get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/1"
+    get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/2"
     header = {
         "x-api-key": tk
     }
@@ -91,7 +91,6 @@ def getdatabyhour():
     recorded_time = json_response["recorded_time"]
     recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
     # Get 12-hour intervals
-        # Get 12-hour intervals
 
     # Define the ranges for filtering
     value_ranges = {
@@ -125,4 +124,4 @@ def getdatabyhour():
 
 #     print(matrix)
     # Print the output
-getdatabyhour()
+# getdatabyhour()

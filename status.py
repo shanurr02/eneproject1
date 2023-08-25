@@ -37,7 +37,7 @@ def check_last_recorded_time_within_1_minute():
     except Exception as e:
         print("Error:", e)
         return False
-
+# print(check_last_recorded_time_within_1_minute())
 # if __name__ == "__main__":
 #     print(check_last_recorded_time_within_1_minute())
     # Read the token from the file
