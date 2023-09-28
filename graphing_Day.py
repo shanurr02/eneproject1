@@ -77,7 +77,7 @@ def getrequest():
         tk = f.read().strip()
 
 
-    get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/2"
+    get_url = "https://api.thingzcloud.com/devices/getData/AQM00002/2"
     header = {
         "x-api-key": tk
     }
@@ -85,6 +85,34 @@ def getrequest():
     json_response = get_response.json()
 
     return json_response
+
+def day_data(data, recorded_time):
+    filtered_data = {}
+    interval_minutes = 2 * 60 + 30  # 2 hours and 24 minutes
+    # recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in data["recorded_time"]]
+    
+    # Find the latest recorded time
+    latest_recorded_time = recorded_time[-1]
+    # print(latest_recorded_time)
+    
+    # Calculate the target timestamps
+    target_times = [latest_recorded_time - timedelta(minutes=i*interval_minutes) for i in range(10)]
+    # print(target_times)
+    # print(recorded_time)
+    for key, value_list in data.items():
+        if key != "recorded_time":
+            filtered_values = []
+            for target_time in target_times:
+                closest_time_index = min(range(len(recorded_time)), key=lambda i: abs(target_time - recorded_time[i]))
+                print(closest_time_index)
+                # index = recorded_time.index(closest_time)
+                # print(index)
+                print(recorded_time[closest_time_index])
+                closest_value = value_list[closest_time_index]
+                filtered_values.append(closest_value)
+            filtered_data[key] = filtered_values
+    
+    return filtered_data
 
 def getdatabyhour():
     json_response = getrequest()
@@ -102,18 +130,24 @@ def getdatabyhour():
     
     # Filter the data
     filtered_data = filter_data(json_response, value_ranges)
-    hourly_averages_data = calculate_3hourly_averages(filtered_data, recorded_time)
-    # hourly_averages_data = calculate_3hourly_averages(json_response, recorded_time)
-    for key, values in hourly_averages_data.items():
-        print(f"{key}: {values}")
-    values_lists = list(hourly_averages_data.values())
+    # hourly_averages_data = calculate_3hourly_averages(filtered_data, recorded_time)
+    # # hourly_averages_data = calculate_3hourly_averages(json_response, recorded_time)
+    # for key, values in hourly_averages_data.items():
+    #     print(f"{key}: {values}")
+    # values_lists = list(hourly_averages_data.values())
 
-    # Create a 2D matrix
-    matrix = []
-    for values_list in values_lists:
-        matrix.append(values_list)
-    # print(matrix)
-    return matrix
+    # # Create a 2D matrix
+    # matrix = []
+    # for values_list in values_lists:
+    #     matrix.append(values_list)
+    # # print(matrix)
+    # return matrix
+    output_data = day_data(filtered_data, recorded_time)
+    matrix = [output_data[key] for key in filtered_data if key != "recorded_time"]
+
+    # Print the matrix
+    for row in matrix:
+        print(row)
 
 # if __name__ == "__main__":
 
@@ -124,4 +158,4 @@ def getdatabyhour():
 
 #     print(matrix)
     # Print the output
-# getdatabyhour()
+getdatabyhour()

@@ -1,4 +1,3 @@
-from json.tool import main
 import requests
 
 # API endpoint and login credentials
