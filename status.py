@@ -27,7 +27,7 @@ def check_last_recorded_time_within_1_minute():
             current_time = datetime.now()
             
             time_difference = current_time - last_recorded_time
-            if time_difference <= timedelta(minutes=1):
+            if time_difference <= timedelta(minutes=8):
                 return True
             else:
                 return False
