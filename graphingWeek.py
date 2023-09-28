@@ -85,7 +85,7 @@ def getdatabyweek(id):
 
     return matrix
 
-getdatabyweek(id)
+# getdatabyweek(id)
 # if __name__ == "__main__":
 #     getdatabyweek()
         # Read the token from the file

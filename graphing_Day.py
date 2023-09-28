@@ -158,4 +158,4 @@ def getdatabyhour(id):
 
 #     print(matrix)
     # Print the output
-getdatabyhour()
+# getdatabyhour()
