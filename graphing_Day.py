@@ -71,13 +71,13 @@ def calculate_3hourly_averages(data, recorded_time):
     return three_hourly_averages
 
 
-def getrequest():
+def getrequest(id):
     # Read the token from the file
     with open("token.txt", "r") as f:
         tk = f.read().strip()
 
 
-    get_url = "https://api.thingzcloud.com/devices/getData/AQM00002/2"
+    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/2"
     header = {
         "x-api-key": tk
     }
@@ -114,8 +114,8 @@ def day_data(data, recorded_time):
     
     return filtered_data
 
-def getdatabyhour():
-    json_response = getrequest()
+def getdatabyhour(id):
+    json_response = getrequest(id)
     recorded_time = json_response["recorded_time"]
     recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
     # Get 12-hour intervals

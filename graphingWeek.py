@@ -37,13 +37,13 @@ def get_24_hour_intervals(data, recorded_time):
         intervals.append(interval_data)
         start_time = end_time
     return intervals
-def getrequest():
+def getrequest(id):
     # Read the token from the file
     with open("token.txt", "r") as f:
         tk = f.read().strip()
 
 
-    get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/7"
+    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/7"
     header = {
         "x-api-key": tk
     }
@@ -53,8 +53,8 @@ def getrequest():
     return json_response
 
 
-def getdatabyweek():
-    json_response = getrequest()
+def getdatabyweek(id):
+    json_response = getrequest(id)
     recorded_time = json_response["recorded_time"]
     recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
     # Define the ranges for filtering
@@ -85,7 +85,7 @@ def getdatabyweek():
 
     return matrix
 
-getdatabyweek()
+getdatabyweek(id)
 # if __name__ == "__main__":
 #     getdatabyweek()
         # Read the token from the file
