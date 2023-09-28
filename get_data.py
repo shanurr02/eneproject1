@@ -4,7 +4,6 @@ with open("token.txt", "r") as f:
     tk = f.read().strip()
 
 
-get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/1"
 
 # Set the headers with the token
 header = {
@@ -30,7 +29,8 @@ def filter_data(json_response, ranges):
     
     return filtered_data
 
-def get_data():
+def get_data(id):   
+    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/1"
     latest_data = []
     get_response = requests.get(get_url, headers=header)
     
