@@ -146,8 +146,8 @@ def getdatabyhour(id):
     matrix = [output_data[key] for key in filtered_data if key != "recorded_time"]
 
     # Print the matrix
-    for row in matrix:
-        print(row)
+    # for row in matrix:
+    #     print(row)
 
 # if __name__ == "__main__":
 
@@ -158,4 +158,4 @@ def getdatabyhour(id):
 
 #     print(matrix)
     # Print the output
-# getdatabyhour()
+getdatabyhour("03")

@@ -8,7 +8,7 @@ def getrequest():
         tk = f.read().strip()
 
 
-    get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/1"
+    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/1"
     header = {
         "x-api-key": tk
     }
@@ -17,9 +17,9 @@ def getrequest():
 
     return json_response
 
-def check_last_recorded_time_within_1_minute():
+def check_last_recorded_time_within_10_minute(id):
     try:
-        json_response = getrequest()
+        json_response = getrequest(id)
         recorded_time = json_response.get("recorded_time")
         if recorded_time:
             last_recorded_time_str = recorded_time[-1]

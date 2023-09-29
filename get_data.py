@@ -65,4 +65,4 @@ def get_data(id):
     return latest_data
 
 
-# get_data()
+get_data("03")

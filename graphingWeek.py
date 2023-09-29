@@ -29,7 +29,7 @@ def get_24_hour_intervals(data, recorded_time):
         for key in data:
             if key != "recorded_time":
                 values = data[key]
-                interval_values = [value for time, value in zip(recorded_time, values) if start_time <= time < end_time and value is not None and value != "null"]
+                interval_values = [value for time, value in zip(recorded_time, values) if start_time <= time < end_time and value is not None and value != "null" and value != None]
                 if interval_values:
                     interval_data[key] = round(sum(interval_values) / len(interval_values), 3)
                 else:
@@ -81,11 +81,11 @@ def getdatabyweek(id):
     for values_list in values_lists:
         matrix.append(values_list)
 
-    # print(matrix)
+    print(matrix)
 
     return matrix
 
-# getdatabyweek(id)
+getdatabyweek("03")
 # if __name__ == "__main__":
 #     getdatabyweek()
         # Read the token from the file
