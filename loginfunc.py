@@ -1,7 +1,5 @@
 import requests
 
-
-
 def loginrequest(username , password) :
     # API endpoint and login credentials
     api_url = "https://api.thingzcloud.com/users/login"
@@ -31,4 +29,4 @@ def loginrequest(username , password) :
         return False
 
 
-# loginrequest("shanurrahman02@gmail.com", "rahman@02")
+loginrequest("shanurrahman02@gmail.com", "rahman@02")

@@ -104,11 +104,13 @@ def day_data(data, recorded_time):
             filtered_values = []
             for target_time in target_times:
                 closest_time_index = min(range(len(recorded_time)), key=lambda i: abs(target_time - recorded_time[i]))
-                print(closest_time_index)
+                # print(key)
+                # print(closest_time_index)
                 # index = recorded_time.index(closest_time)
                 # print(index)
-                print(recorded_time[closest_time_index])
+                # print(recorded_time[closest_time_index])
                 closest_value = value_list[closest_time_index]
+                # print(closest_value)
                 filtered_values.append(closest_value)
             filtered_data[key] = filtered_values
     
@@ -124,7 +126,7 @@ def getdatabyhour(id):
     value_ranges = {
         "temperature": (0, 50),
         "humidity": (0, 100),
-        "flow": (0.9, 1.1)
+        # "flow": (0.9, 1.3)
         # Add more key-value pairs and ranges as needed
     }
     
@@ -146,8 +148,8 @@ def getdatabyhour(id):
     matrix = [output_data[key] for key in filtered_data if key != "recorded_time"]
 
     # Print the matrix
-    # for row in matrix:
-    #     print(row)
+    for row in matrix:
+        print(row)
 
 # if __name__ == "__main__":
 
