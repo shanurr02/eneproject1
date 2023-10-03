@@ -2,13 +2,13 @@ import requests
 from datetime import datetime, timedelta
 
 
-def getrequest():
+def getrequest(id):
     # Read the token from the file
     with open("token.txt", "r") as f:
         tk = f.read().strip()
 
 
-    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/1"
+    get_url = f"https://api.thingzcloud.com/devices/getData/{id}/1"
     header = {
         "x-api-key": tk
     }
@@ -54,3 +54,6 @@ def check_last_recorded_time_within_10_minute(id):
 
     # result = check_last_recorded_time_within_1_minute(json_response)
     # print("Last recorded time within 1 minute:", result)
+
+if __name__ == "__main__":
+    print(check_last_recorded_time_within_10_minute("03"))

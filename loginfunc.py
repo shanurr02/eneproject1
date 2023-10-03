@@ -30,5 +30,5 @@ def loginrequest(username , password) :
         print("Login failed. Status code:", response.status_code)
         return False
 
-
-loginrequest("shanurrahman02@gmail.com", "rahman@02")
+if __name__ == "__main__":
+    loginrequest("shanurrahman02@gmail.com", "rahman@02")

@@ -29,5 +29,5 @@ def loginrequest() :
     else:
         print("Login failed. Status code:", response.status_code)
 
-
-loginrequest()
+if __name__ == "__main__":
+    loginrequest()
