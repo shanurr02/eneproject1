@@ -1,15 +1,6 @@
 import requests
-# Read the token from the file
-with open("token.txt", "r") as f:
-    tk = f.read().strip()
+from login_api import loginrequest
 
-
-
-# Set the headers with the token
-header = {
-    "x-api-key": tk
-}
-latest_data = []
 
 def filter_data(json_response, ranges):
     filtered_data = json_response.copy()
@@ -28,24 +19,31 @@ def filter_data(json_response, ranges):
             filtered_data[key] = filtered_values
     
     return filtered_data
-
 def get_data(id):   
     get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/1"
+    # Read the token from the file
+    with open("token.txt", "r") as f:
+        tk = f.read().strip()
+
+    # Set the headers with the token
+    header = {
+        "x-api-key": tk
+    }
+
     latest_data = []
     get_response = requests.get(get_url, headers=header)
-    
     # Check if the GET request was successful
     if get_response.status_code == 200:
         # Process the response
         json_response = get_response.json()
-
         # Iterate over each key in the response JSON
         for key, value_list in json_response.items():
             if key == "error":
                 print(json_response)
                 print("Error logging! Login Again")
-                continue
-
+                loginrequest()
+                get_data(id)
+                return
             # Check if the value is a list
             if isinstance(value_list, list) and len(value_list) > 0:
                 # Iterate through the value list in reverse order
@@ -64,5 +62,5 @@ def get_data(id):
     # print(latest_data)
     return latest_data
 
-
-get_data("03")
+if __name__ == "__main__":
+    get_data("03")

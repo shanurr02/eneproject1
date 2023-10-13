@@ -38,10 +38,10 @@ def devicedetails(username , password) :
         output_dict["Active_devices"] = active_device_ids
         # output_dict.update(["Active_devices", active_device_ids])
         print(output_dict)
-        return True
+        return True , output_dict
     else:
         print("Login failed. Status code:", response.status_code)
         return False
 
-
-devicedetails("shanurrahman02@gmail.com", "rahman@02")
+if __name__ == "__main__":
+    devicedetails("shanurrahman02@gmail.com", "rahman@02")
