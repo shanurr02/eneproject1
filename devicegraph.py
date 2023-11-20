@@ -11,12 +11,24 @@ columns_to_compare = ['TEMPERATURE', 'HUMIDITY', 'FLOW', 'TSP', 'PM10']
 # Assuming 'RECIEVED TIME' is the column containing date and time
 date_time_column = 'RECIEVED TIME'
 
-# Extract date from 'RECIEVED TIME' and create groups of two consecutive days
+# Extract date from 'RECIEVED TIME' and create dynamic date groups
 file1[date_time_column] = pd.to_datetime(file1[date_time_column])
 file2[date_time_column] = pd.to_datetime(file2[date_time_column])
 
-date_groups = pd.date_range(start='2023-10-24', end='2023-11-16', freq='2D').strftime('%m-%d').tolist()
-print(date_groups)
+min_date = min(file1[date_time_column].min(), file2[date_time_column].min())
+# print(min_date)
+max_date = max(file1[date_time_column].max(), file2[date_time_column].max())
+# print(max_date)
+
+date_groups = pd.date_range(start=min_date, end=max_date, freq='2D').strftime('%d')
+# print(date_groups)
+
+ddg = []
+for date in date_groups:
+    groupdate = str(date) + "-" + str(int(date)+1)
+    ddg.append(groupdate)
+
+print(ddg)
 # Iterate through each parameter
 for column in columns_to_compare:
     # Create lists to store average values for each device
@@ -25,8 +37,18 @@ for column in columns_to_compare:
 
     # Split data into groups for each device
     for date_group in date_groups:
-        group_data_device1 = file1[(file1[date_time_column].dt.strftime('%m-%d') == date_group)][column].mean()
-        group_data_device2 = file2[(file2[date_time_column].dt.strftime('%m-%d') == date_group)][column].mean()
+        group_start_date = (pd.to_datetime(date_group) - pd.DateOffset(days=1)).strftime('%m-%d')
+        group_end_date = pd.to_datetime(date_group).strftime('%m-%d')
+
+        group_data_device1 = file1[
+            (file1[date_time_column].dt.strftime('%m-%d') >= group_start_date) &
+            (file1[date_time_column].dt.strftime('%m-%d') <= group_end_date)
+        ][column].mean()
+
+        group_data_device2 = file2[
+            (file2[date_time_column].dt.strftime('%m-%d') >= group_start_date) &
+            (file2[date_time_column].dt.strftime('%m-%d') <= group_end_date)
+        ][column].mean()
 
         device1_data.append(group_data_device1)
         device2_data.append(group_data_device2)
@@ -45,4 +67,4 @@ for column in columns_to_compare:
     plt.tight_layout()
 
 # Show all the plots
-plt.show()
+# plt.show()
