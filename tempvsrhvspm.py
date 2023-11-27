@@ -21,11 +21,11 @@ def filter_data(json_response, ranges):
     
     return filtered_data
 
-def get_24_hour_intervals(data, recorded_time):
+def get_12_hour_intervals(data, recorded_time):
     intervals = []
     start_time = recorded_time[0]
-    for i in range(7):
-        end_time = start_time + timedelta(days=1)
+    for i in range(14):
+        end_time = start_time + timedelta(days=0.5)
         interval_data = {}
         for key in data:
             if key != "recorded_time":
@@ -69,8 +69,7 @@ def getdatabyweek(id):
     # Filter the data
     filtered_data = filter_data(json_response, value_ranges)
     # Get 12-hour intervals
-    # data_intervals = get_24_hour_intervals(json_response, recorded_time)
-    data_intervals = get_24_hour_intervals(filtered_data, recorded_time)
+    data_intervals = get_12_hour_intervals(filtered_data, recorded_time)
     
     # # Rearrange the output to the desired format
     output_format = {key: [interval_data[key] for interval_data in data_intervals] for key in data_intervals[0]}
@@ -103,10 +102,10 @@ def main():
     matrix = getdatabyweek("03")
     temperature = matrix[0]
     humidity = matrix[1]
-    pm1 = matrix[5]
-    pm2_5 = matrix[6]
-    pm10 = matrix[7]
-    tsp = matrix[4]
+    pm1 = matrix[4]
+    pm2_5 = matrix[5]
+    pm10 = matrix[6]
+    tsp = matrix[3]
     # Plotting
     plot_3d_scatter(temperature, humidity, pm1, 'PM1')
     plot_3d_scatter(temperature, humidity, pm2_5, 'PM2.5')
@@ -114,28 +113,3 @@ def main():
     plot_3d_scatter(temperature, humidity, tsp, 'TSP')
 
 main()
-# if __name__ == "__main__":
-#     getdatabyweek()
-        # Read the token from the file
-    # with open("token.txt", "r") as f:
-    #     tk = f.read().strip()
-
-
-    # get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/7"
-    # header = {
-    #     "x-api-key": tk
-    # }
-    # get_response = requests.get(get_url, headers=header)
-    # json_response = get_response.json()
-
-    # recorded_time = json_response["recorded_time"]
-    # recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
-    # # Get 12-hour intervals
-    # data_intervals = get_24_hour_intervals(json_response, recorded_time)
-    
-    # # Rearrange the output to the desired format
-    # output_format = {key: [interval_data[key] for interval_data in data_intervals] for key in data_intervals[0]}
-
-    # # Print the output
-    # for key, average_values in output_format.items():
-    #     print(f"{key}: {average_values}")
