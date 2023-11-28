@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import requests
 import matplotlib.pyplot as plt
 import numpy as np
-
+from tempvsrhvspm import get_24_hour_intervals
 def filter_data(json_response, ranges):
     filtered_data = json_response.copy()
     
@@ -76,23 +76,6 @@ def calculate_averages(data):
         averages[key] = round(sum(values) / len(values), 3) if values else None
     return averages
 
-def get_24_hour_intervals(data, recorded_time):
-    intervals = []
-    start_time = recorded_time[0]
-    for i in range(14):
-        end_time = start_time + timedelta(days=0.5)
-        interval_data = {}
-        for key in data:
-            if key != "recorded_time":
-                values = data[key]
-                interval_values = [value for time, value in zip(recorded_time, values) if start_time <= time < end_time and value is not None and value != "null" and value != None]
-                if interval_values:
-                    interval_data[key] = round(sum(interval_values) / len(interval_values), 3)
-                else:
-                    interval_data[key] = None
-        intervals.append(interval_data)
-        start_time = end_time
-    return intervals
 def getrequest(id):
     # Read the token from the file
     with open("token.txt", "r") as f:
@@ -108,10 +91,10 @@ def getrequest(id):
 
     return json_response
     
-def plot_dual_line_graph(data1, data2, start_day):
+def plot_dual_line_graph(data1, data2, start_day, title):
     # Ensure both data lists have exactly 14 points
-    if len(data1) != 14 or len(data2) != 14:
-        raise ValueError("Both data lists should contain exactly 14 points.")
+    # if len(data1) != 14 or len(data2) != 14:
+    #     raise ValueError("Both data lists should contain exactly 14 points.")
 
     # Define the order of days in a week
     days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -128,13 +111,13 @@ def plot_dual_line_graph(data1, data2, start_day):
     # Plotting
     x = np.arange(len(labels))
 
-    plt.plot(x, data1, marker='o', label='Current week')
-    plt.plot(x, data2, marker='o', label='Last week')
+    plt.plot(x, data1, marker='o', label='Last week')
+    plt.plot(x, data2, marker='o', label='Current week')
 
-    plt.xticks(x, labels, rotation=45, ha="right")
+    plt.xticks(x, labels, rotation=35, ha="right")
     plt.xlabel("Day of the Week and Time of Day")
     plt.ylabel("Data Points")
-    plt.title("Line Graph of Data Points for Each Day and Time of Day")
+    plt.title(f"Line Graph of {title} Data Points for Each Day and Time of Day")
     plt.legend()
     plt.show()
 
@@ -205,38 +188,10 @@ def main():
     pm10_w2 = matrix_week2[6]
     tsp_w2 = matrix_week2[3]
     # # Plotting
-    plot_dual_line_graph(pm1_w1,pm1_w2, weekstart)
-    plot_dual_line_graph(pm2_5_w1,pm2_5_w2, weekstart)
-    plot_dual_line_graph(pm10_w1,pm10_w2, weekstart)
-    plot_dual_line_graph(tsp_w1,tsp_w2, weekstart)
-    # plot_3d_scatter(temperature, humidity, pm1, 'PM1')
-    # plot_3d_scatter(temperature, humidity, pm2_5, 'PM2.5')
-    # plot_3d_scatter(temperature, humidity, pm10, 'PM10')
-    # plot_3d_scatter(temperature, humidity, tsp, 'TSP')
+    plot_dual_line_graph(pm1_w1,pm1_w2, weekstart, "PM1")
+    plot_dual_line_graph(pm2_5_w1,pm2_5_w2, weekstart, "PM2_5")
+    plot_dual_line_graph(pm10_w1,pm10_w2, weekstart, "PM10")
+    plot_dual_line_graph(tsp_w1,tsp_w2, weekstart, "TSP")
 
-main()
-# if __name__ == "__main__":
-#     getdatabyweek()
-        # Read the token from the file
-    # with open("token.txt", "r") as f:
-    #     tk = f.read().strip()
-
-
-    # get_url = "https://api.thingzcloud.com/devices/getData/AQM00003/7"
-    # header = {
-    #     "x-api-key": tk
-    # }
-    # get_response = requests.get(get_url, headers=header)
-    # json_response = get_response.json()
-
-    # recorded_time = json_response["recorded_time"]
-    # recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
-    # # Get 12-hour intervals
-    # data_intervals = get_24_hour_intervals(json_response, recorded_time)
-    
-    # # Rearrange the output to the desired format
-    # output_format = {key: [interval_data[key] for interval_data in data_intervals] for key in data_intervals[0]}
-
-    # # Print the output
-    # for key, average_values in output_format.items():
-    #     print(f"{key}: {average_values}")
+if __name__ == "__main__":
+    main()
