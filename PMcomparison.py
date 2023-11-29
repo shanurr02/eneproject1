@@ -76,13 +76,13 @@ def calculate_averages(data):
         averages[key] = round(sum(values) / len(values), 3) if values else None
     return averages
 
-def getrequest(id):
+def getrequest(id, days):
     # Read the token from the file
     with open("token.txt", "r") as f:
         tk = f.read().strip()
 
-
-    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/14"
+    print(days)
+    get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/{days}"
     header = {
         "x-api-key": tk
     }
@@ -114,7 +114,7 @@ def plot_dual_line_graph(data1, data2, start_day, title):
     plt.plot(x, data1, marker='o', label='Last week')
     plt.plot(x, data2, marker='o', label='Current week')
 
-    plt.xticks(x, labels, rotation=35, ha="right")
+    plt.xticks(x, labels, rotation=30, ha="right")
     plt.xlabel("Day of the Week and Time of Day")
     plt.ylabel("Data Points")
     plt.title(f"Line Graph of {title} Data Points for Each Day and Time of Day")
@@ -122,8 +122,8 @@ def plot_dual_line_graph(data1, data2, start_day, title):
     plt.show()
 
 
-def getdatabyweek(id):
-    json_response = getrequest(id)
+def getdatabyweek(id , days):
+    json_response = getrequest(id, days)
     recorded_time = json_response["recorded_time"]
     recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
     # Define the ranges for filtering
@@ -176,7 +176,7 @@ def find_day(date):
 # getdatabyweek("03")
 
 def main():
-    matrix_week1, matrix_week2, weekstart = getdatabyweek("03")
+    matrix_week1, matrix_week2, weekstart = getdatabyweek("03" , "14")
     # temperature = matrix[0]
     # humidity = matrix[1]
     pm1_w1 = matrix_week1[4]

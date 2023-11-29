@@ -32,11 +32,13 @@ def get_24_hour_intervals(data, recorded_time):
     # print(end_time)
     interval_data = {}
     for key in data:
-        if key != "recorded_time":
+        if key != "recorded_time" and key != "recieved_time":
             values = data[key]
             interval_values = [value for time, value in zip(recorded_time, values) if start_time <= time < end_time and value is not None and value != "null" and value != None]
             if interval_values:
+                # print(interval_values)
                 interval_data[key] = round(sum(interval_values) / len(interval_values), 3)
+                # print(interval_data)
             else:
                 interval_data[key] = None
     intervals.append(interval_data)
@@ -47,10 +49,11 @@ def get_24_hour_intervals(data, recorded_time):
         # print(end_time)
         interval_data = {}
         for key in data:
-            if key != "recorded_time":
+            if key != "recorded_time" and key != "recieved_time":
                 values = data[key]
                 interval_values = [value for time, value in zip(recorded_time, values) if start_time <= time < end_time and value is not None and value != "null" and value != None]
                 if interval_values:
+                    print(interval_values , end_time, key)
                     interval_data[key] = round(sum(interval_values) / len(interval_values), 3)
                 else:
                     interval_data[key] = None
@@ -66,7 +69,7 @@ def get_24_hour_intervals(data, recorded_time):
         end_time = recorded_time[-1]
         interval_data = {}
         for key in data:
-            if key != "recorded_time":
+            if key != "recorded_time"and key != "recieved_time":
                 values = data[key]
                 interval_values = [value for time, value in zip(recorded_time, values) if start_time <= time < end_time and value is not None and value != "null" and value != None]
                 if interval_values:
@@ -96,7 +99,7 @@ def get_time_intervals(recorded_time):
     start_time = end_time
     end_time = start_time.replace(hour=0, minute=0, second=0) + timedelta(days=1)
     intervals.append({"start": start_time, "end": end_time})
-    print(intervals)
+    # print(intervals)
     return intervals
 
 def getrequest(id):
@@ -152,6 +155,13 @@ def plot_3d_scatter(x, y, z, title, intervals):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
+    # Filter out None values
+    valid_indices = [i for i in range(len(z)) if z[i] is not None]
+    x = [x[i] for i in valid_indices]
+    y = [y[i] for i in valid_indices]
+    z = [z[i] for i in valid_indices]
+    intervals = [intervals[i] for i in valid_indices]
+
     # Plot the points
     sc = ax.scatter(x, y, z, c='blue', marker='o')
 
@@ -165,7 +175,7 @@ def plot_3d_scatter(x, y, z, title, intervals):
     # Create a dummy annotation to support hover
     def update_position(e):
         sc.set_offsets(e)
-        pos = proj3d.proj_transform(e[0], e[1], e[2], ax.get_proj())
+        pos = ax.transData.transform(e)  # Adjusted to transData
         label.xy = pos
 
     def hover(event):
@@ -173,10 +183,14 @@ def plot_3d_scatter(x, y, z, title, intervals):
         if event.inaxes == ax:
             cont, ind = sc.contains(event)
             if cont:
-                update_position(sc.get_offsets()[ind])
-                label.set_text(labels[ind])
-                label.set_visible(True)
-                fig.canvas.draw_idle()
+                # Fix: Extract the index correctly
+                ind = ind['ind'][0] if 'ind' in ind else None
+
+                if ind is not None:
+                    update_position(sc.get_offsets()[ind])
+                    label.set_text(labels[ind])
+                    label.set_visible(True)
+                    fig.canvas.draw_idle()
             else:
                 if vis:
                     label.set_visible(False)
