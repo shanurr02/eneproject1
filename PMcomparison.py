@@ -130,7 +130,8 @@ def getdatabyweek(id , days):
     value_ranges = {
         "temperature": (0, 50),
         "humidity": (0, 100),
-        "flow": (0.9, 1.1)
+        "flow": (0.9, 1.1),
+        "PM1_0": (0,400)
         # Add more key-value pairs and ranges as needed
     }
     
@@ -179,6 +180,11 @@ def main():
     matrix_week1, matrix_week2, weekstart = getdatabyweek("03" , "14")
     # temperature = matrix[0]
     # humidity = matrix[1]
+    tempw1 = matrix_week1[0]
+    tempw2 = matrix_week2[0]
+    humidityw1 = matrix_week1[1]
+    humidityw2 = matrix_week2[1]
+
     pm1_w1 = matrix_week1[4]
     pm2_5_w1 = matrix_week1[5]
     pm10_w1 = matrix_week1[6]
@@ -188,6 +194,8 @@ def main():
     pm10_w2 = matrix_week2[6]
     tsp_w2 = matrix_week2[3]
     # # Plotting
+    plot_dual_line_graph(tempw1,tempw2, weekstart, "Temperature")
+    plot_dual_line_graph(humidityw1,humidityw2, weekstart, "Humidity")
     plot_dual_line_graph(pm1_w1,pm1_w2, weekstart, "PM1")
     plot_dual_line_graph(pm2_5_w1,pm2_5_w2, weekstart, "PM2_5")
     plot_dual_line_graph(pm10_w1,pm10_w2, weekstart, "PM10")

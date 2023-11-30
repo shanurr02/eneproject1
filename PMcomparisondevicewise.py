@@ -12,7 +12,7 @@ def fetch_data(id):
     # print(dd)
     dd1 = dd + timedelta(days=-6)
     # print(dd1)
-    get_url = f"https://api.thingzcloud.com/devices/getDataByDate/AQM000{id}/{dd1}/{dd}/d"
+    get_url = f"https://api.thingzcloud.com/devices/getDataByDate/AQM000{id}/2023-11-10/2023-11-18/d"
     # get_url = f"https://api.thingzcloud.com/devices/getData/AQM000{id}/2"
     header = {"x-api-key": tk}
     get_response = requests.get(get_url, headers=header)
@@ -21,10 +21,11 @@ def fetch_data(id):
     return json_response
 def getdatabyweek(id1, id2 , days):
     # print(days)
-    json_response1 = getrequest(id2, days)
-    print("D1")
+    # json_response1 = getrequest(id2, days)
+    json_response1 = fetch_data(id2)
+    # print("D1")
     json_response2 = fetch_data(id1)
-    print("D2")
+    # print("D2")
     recorded_time = json_response1["recorded_time"]
     recorded_time = [datetime.strptime(time_str, "%m/%d/%Y, %H:%M:%S") for time_str in recorded_time]
     # Define the ranges for filtering

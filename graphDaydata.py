@@ -34,15 +34,18 @@ def fetch_data(id):
 def extract_day_data(data, recorded_time):
     interval_minutes = 2 * 60 + 30  # 2 hours and 30 minutes
     latest_recorded_time = recorded_time[-1]
-    target_times = [latest_recorded_time - timedelta(minutes=i * interval_minutes) for i in range(10)]
-
+    target_times = [latest_recorded_time - timedelta(minutes=i * interval_minutes) for i in range(11)]
+    print(target_times)
+    print(len(recorded_time))
     filtered_data = {}
     for key, value_list in data.items():
         if key != "recorded_time":
             filtered_values = []
+            print(len(value_list))
             for target_time in target_times:
                 closest_time_index = min(range(len(recorded_time)), key=lambda i: abs(target_time - recorded_time[i]))
-                closest_value = value_list[closest_time_index]
+                print(closest_time_index)
+                closest_value = value_list[closest_time_index%(len(recorded_time)-5)]
                 filtered_values.append(closest_value)
             filtered_data[key] = filtered_values
     

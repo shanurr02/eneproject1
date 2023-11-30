@@ -204,7 +204,7 @@ def plot_3d_scatter(x, y, z, title, intervals):
     ax.set_ylabel('Humidity')
     ax.set_zlabel(title)
 
-    plt.title(f'{title} vs Temperature and Humidity')
+    plt.title(f'{title}(value in microgram per metre cube) vs Temperature(in C) and Humidity(in Terms of RH')
     plt.show()
 
 def main():
@@ -219,8 +219,8 @@ def main():
 
     # Plotting
     plot_3d_scatter(temperature, humidity, pm1, 'PM1', intervals)
-    # plot_3d_scatter(temperature, humidity, pm2_5, 'PM2_5', intervals)
-    # plot_3d_scatter(temperature, humidity, pm10, 'PM10', intervals)
-    # plot_3d_scatter(temperature, humidity, tsp, 'tsp', intervals)
+    plot_3d_scatter(temperature, humidity, pm2_5, 'PM2_5', intervals)
+    plot_3d_scatter(temperature, humidity, pm10, 'PM10', intervals)
+    plot_3d_scatter(temperature, humidity, tsp, 'tsp', intervals)
 if __name__ == "__main__":
     main()
